@@ -292,18 +292,27 @@ current order abbrechen
     \label{Drehteller} % Für spätere Verweise im Text.
 \end{figure}
 
-Das Flaschenmanagment der Abfüllstation ist so umgesetzt, dass für jeden angeforderten Auftrag, die angeforderte Anzahl an Flaschen von dem Modualren 
-Produktiuonssystem gesendet wird. Diese Flaschen werden dann befüllt und mit Deckeln bedeckt. Wenn allerdings keine neuen Flaschen nachgeliefert werden, zum 
-Beispiel kommen von 12 angeforderten Flaschen nur 9 an, steht die Abfüllung still und erwartete die Einfahrt einer neuen Flasche an Position 1 (verweis zum
-bild?) am Drehteller. Um allerdings einen stetigen Arbeitsfluss beizuhalten, habe ich in der Unit der Abfüllstation nach dem absprechen mit den Betreuern, 
-eingeführt, dass wenn nach 7 Sekunden keine neue Flasche geliefert wird, die restlichen Flaschen, welche sich im Drehteller befinden und daher einen Auftrag
-zugewiesen haben, abgefüllt und bedeckelt werden. 
-Außerdem werden die Auftragsdaten nicht remanent, also über ein PLC-Stop, gespeichert. Dies hatte dafür gesorgt, dass nach jedem Neu- oder Kaltstart, alle 
-Flaschen aus dem Drehteller entfernt werden mussten, bevor ein neuer Auftrag angelegt werden konnte, dies hatte gegen das Ziel einer leichten Bedienung, auch für
-Anlagen Unvertraute, besprochen. Denn der Drehteller hatte erkannt, dass sich eine Flasche oder Flaschen an den einzelnen Positionen, 1-9, befinden. 
-Dies sorget dazu, dass der Drehteller in einen nicht gültigen Zustand geht. Denn für jede Position an welcher eine Aufgabe absolviert werden muss, 
-zum Beispiel an Position 4, wo die Kugel abgefüllt werdee, an Position 5, wo der Deckel angefordert wird, Position 7, wo der Deckel verschraubt wird und an
-Position 8, wo der RFID-Tag beschrieben wird.
+Das Flaschenmanagement der Abfüllstation wurde so umgesetzt, dass für jeden angeforderten Auftrag die benötigte Anzahl an Flaschen vom modularen 
+Produktionssystem bereitgestellt wird. Diese Flaschen werden anschließend befüllt und mit Deckeln verschlossen. Ein Problem tritt jedoch auf, 
+wenn nicht genügend Flaschen nachgeliefert werden. Beispielsweise können von 12 angeforderten Flaschen nur 9 ankommen, wodurch die Abfüllung 
+anhält und auf die Ankunft einer neuen Flasche an Position 1 des Drehtellers wartet (Verweis auf Abbildung?).
+
+Um den Arbeitsfluss kontinuierlich aufrechtzuerhalten, habe ich in Absprache mit den Betreuern eine Anpassung in der Unit der Abfüllstation 
+vorgenommen. Diese Änderung sorgt dafür, dass, falls innerhalb von sieben Sekunden keine neue Flasche geliefert wird, die verbliebenen Flaschen, 
+die sich bereits im Drehteller befinden und einem Auftrag zugewiesen wurden, dennoch abgefüllt und verschlossen werden. Dies gewährleistet eine 
+höhere Effizienz und verhindert lange Stillstandszeiten der Abfüllstation.
+
+Ein weiteres Problem betraf die Speicherung der Auftragsdaten. Diese wurden ursprünglich nicht remanent gespeichert, also nicht über einen 
+PLC-Stop hinaus erhalten. Dies führte dazu, dass nach jedem Neustart oder Kaltstart der Steuerung alle Flaschen aus dem Drehteller entfernt 
+werden mussten, bevor ein neuer Auftrag angelegt werden konnte. Dieses Verhalten widersprach dem Ziel, die Anlage auch für unerfahrene Bediener 
+einfach und benutzerfreundlich zu gestalten.
+
+Der Drehteller erkannte nach einem Neustart weiterhin, dass sich Flaschen an den einzelnen Positionen (1–9) befanden. Dies führte dazu, dass der 
+Drehteller in einen ungültigen Zustand geriet, da er für jede Position, an der eine Aufgabe auszuführen war, fehlerhafte Zustandsinformationen 
+erhielt. Beispielsweise müssen an Position 4 die Flaschen befüllt, an Position 5 die Deckel angefordert, an Position 7 die Deckel verschraubt und 
+an Position 8 die RFID-Tags beschrieben werden. Ohne korrekte Zustandsinformationen konnte der Drehteller diese Aufgaben nicht ausführen, was die 
+gesamte Anlage blockierte. Nun nach meiner Änderung, wird der Drehteller darauf hingewiesen, dass sich unbekannte Flaschen, also Flaschen ohne 
+Auftrag, im Drehteller befinden. Diese Flaschen werden jetzt automatisch aus dem Drehteller entfernt und an das Quality Gate weitergeleitet.
 
 \textbf{Drehteller:} 
 fehlerfindung der knöpe -> Initalisierungsfahrt 
@@ -326,5 +335,9 @@ weiteren Arbeiten konzentrieren sich nun auf die Verbesserung der Benutzerfreund
 Aus den täglichen Meetings und dem Feedback der Projektmitglieder geht hervor, dass auch an den anderen Stationen der Anlage deutliche 
 Fortschritte erzielt wurden. Falls der Projektfortschritt bis zum Ende des Praxissemesters nicht vollständig den gesetzten Zielen entspricht, 
 bieten die sorgfältig erstellten Konzeptdokumente eine solide Grundlage für eine erfolgreiche Weiterführung durch zukünftige Studierende.
+
+
+Durch die vorgenommenen Änderungen wurde nicht nur die Effizienz der Abfüllstation gesteigert, sondern auch die Benutzerfreundlichkeit und 
+Robustheit des Systems deutlich verbessert.
 
 
