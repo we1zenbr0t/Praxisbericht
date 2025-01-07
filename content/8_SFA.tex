@@ -74,7 +74,7 @@ modulare Produktionssystem gesendeten Flaschen werden durch einen Drehteller an 
 Als erstes wird die Flasche mit des Auftrages angegebenen Anzahl an Kugeln befüllt. Dann wird ein Deckel von dem modulare 
 Produktionssystem angefordert. Der Deckel wird danach mit einen drehbaren Greifer verschraubt und an der nächsten Station 
 wird der Deckel mit einem RFID-Tag beschrieben. Der RFID-Tag enthält Datum und Uhrzeit der Abfüllung, sowie welcher Auftrag 
-abgefüllt wurde.
+abgefüllt wurde. 
 
 \subsection{Station 3: Quality Gate (geschrieben)}\label{sec:Station 3: Quality Gate}
 
@@ -292,7 +292,17 @@ current order abbrechen
     \label{Drehteller} % Für spätere Verweise im Text.
 \end{figure}
 
-Das Flaschenmanagment der Abfüllstation ist so umgesetzt, dass für jeden angeforderten Auftrag, die angeforderte Anzahl an Flaschen von dem Modualren Produktiuonssystem gesendet wird. Diese Flaschen werden dann befüllt und mit Deckeln bedeckt. Wenn allerdings keine neuen Flaschen nachgeliefert werden, zum Beispiel kommen von 12 angeforderten Flaschen nur 9 an, steht die Abfüllung still und erwartete die Einfahrt einer neuen Flasche am Drehteller.
+Das Flaschenmanagment der Abfüllstation ist so umgesetzt, dass für jeden angeforderten Auftrag, die angeforderte Anzahl an Flaschen von dem Modualren 
+Produktiuonssystem gesendet wird. Diese Flaschen werden dann befüllt und mit Deckeln bedeckt. Wenn allerdings keine neuen Flaschen nachgeliefert werden, zum 
+Beispiel kommen von 12 angeforderten Flaschen nur 9 an, steht die Abfüllung still und erwartete die Einfahrt einer neuen Flasche an Position 1 (verweis zum
+bild?) am Drehteller. Um allerdings einen stetigen Arbeitsfluss beizuhalten, habe ich in der Unit der Abfüllstation nach dem absprechen mit den Betreuern, 
+eingeführt, dass wenn nach 7 Sekunden keine neue Flasche geliefert wird, die restlichen Flaschen, welche sich im Drehteller befinden und daher einen Auftrag
+zugewiesen haben, abgefüllt und bedeckelt werden. 
+Außerdem werden die Auftragsdaten nicht remanent, also über ein PLC-Stop, gespeichert. Dies hatte dafür gesorgt, dass nach jedem Neu- oder Kaltstart, alle 
+Flaschen aus dem Drehteller entfernt werden mussten, bevor ein neuer Auftrag angelegt werden konnte, dies hatte gegen das Ziel einer leichten Bedienung, auch für
+Anlagen Unvertraute, besprochen. Denn der Drehteller hatte erkannt, dass sich eine Flasche 
+oder Flaschen an den einzelnen Positionen, 1-9, befinden. Dies sorget dazu, dass der Drehteller in einen nicht gültigen Zustand geht. Denn für jede Position an
+welcher eine Aufgabe absolviert werden muss, zum Beispiel an Position 4, wo die Kugel abgefüllt werdee, an Position 5, wo der Deckel angefordert wird, Position 7 , wo der Deckel verschraubt wird und an Position 8, wo der RFID-Tag beschrieben wird.
 
 \textbf{Drehteller:} 
 fehlerfindung der knöpe -> Initalisierungsfahrt 
