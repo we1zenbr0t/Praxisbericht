@@ -5,7 +5,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics{figures/Screenshot 2025-01-03 124137.png}
-    \caption{Stationen der SmartFactory-Anlage\cite{bee2022}} % "Abbildung 2" wird automatisch eingefügt.
+    \caption{Stationen der SmartFactory-Anlage\cite{siemens2022}} % "Abbildung 2" wird automatisch eingefügt.
     \label{Stationen der SmartFactory-Anlage} % Für spätere Verweise im Text.
 \end{figure}
 
@@ -258,7 +258,7 @@ Control Module hingegen stehen nur in Verbindung mit Equipment Modulen.
 \begin{figure}[h!]
     \centering
     \includegraphics*{figures/Screenshot 2025-01-03 201917.png}
-    \caption{ISA-88 Modulhierarchie\cite{bee2022}} % "Abbildung 2" wird automatisch eingefügt.
+    \caption{ISA-88 Modulhierarchie\cite{siemens2022}} % "Abbildung 2" wird automatisch eingefügt.
     \label{fig:isa88-modulhierarchie} % Für spätere Verweise im Text.
 \end{figure}
 
@@ -288,16 +288,16 @@ current order abbrechen
 \begin{figure}[h!]
     \centering
     \includegraphics{figures/image.png}
-    \caption{Drehteller der Abfüllanlage\cite{bee2022}} % "Abbildung 2" wird automatisch eingefügt.
+    \caption{Drehteller der Abfüllanlage\cite{siemens2022}} % "Abbildung 2" wird automatisch eingefügt.
     \label{Drehteller} % Für spätere Verweise im Text.
 \end{figure}
 
 Das Flaschenmanagement der Abfüllstation wurde so umgesetzt, dass für jeden angeforderten Auftrag die benötigte Anzahl an Flaschen vom modularen 
-Produktionssystem bereitgestellt wird. Diese Flaschen werden anschließend befüllt und mit Deckeln verschlossen. Ein Problem tritt jedoch auf, 
-wenn nicht genügend Flaschen nachgeliefert werden. Beispielsweise können von 12 angeforderten Flaschen nur 9 ankommen, wodurch die Abfüllung 
-anhält und auf die Ankunft einer neuen Flasche an Position 1 des Drehtellers wartet (Verweis auf Abbildung?).
+Produktionssystem bereitgestellt wird. Diese Flaschen werden anschließend befüllt und mit Deckeln verschlossen. Ein Problem trat jedoch auf, wenn 
+nicht genügend Flaschen nachgeliefert wurden. Beispielsweise konnten von 12 angeforderten Flaschen nur 9 ankommen, wodurch die Abfüllung anhielt 
+und auf die Ankunft einer neuen Flasche an Position 1 des Drehtellers wartete.
 
-Um den Arbeitsfluss kontinuierlich aufrechtzuerhalten, habe ich in Absprache mit den Betreuern eine Anpassung in der Unit der Abfüllstation 
+Um den Arbeitsfluss kontinuierlich aufrechtzuerhalten, wurde in Absprache mit den Betreuern eine Anpassung in der Unit der Abfüllstation 
 vorgenommen. Diese Änderung sorgt dafür, dass, falls innerhalb von sieben Sekunden keine neue Flasche geliefert wird, die verbliebenen Flaschen, 
 die sich bereits im Drehteller befinden und einem Auftrag zugewiesen wurden, dennoch abgefüllt und verschlossen werden. Dies gewährleistet eine 
 höhere Effizienz und verhindert lange Stillstandszeiten der Abfüllstation.
@@ -309,10 +309,11 @@ einfach und benutzerfreundlich zu gestalten.
 
 Der Drehteller erkannte nach einem Neustart weiterhin, dass sich Flaschen an den einzelnen Positionen (1–9) befanden. Dies führte dazu, dass der 
 Drehteller in einen ungültigen Zustand geriet, da er für jede Position, an der eine Aufgabe auszuführen war, fehlerhafte Zustandsinformationen 
-erhielt. Beispielsweise müssen an Position 4 die Flaschen befüllt, an Position 5 die Deckel angefordert, an Position 7 die Deckel verschraubt und 
-an Position 8 die RFID-Tags beschrieben werden. Ohne korrekte Zustandsinformationen konnte der Drehteller diese Aufgaben nicht ausführen, was die 
-gesamte Anlage blockierte. Nun nach meiner Änderung, wird der Drehteller darauf hingewiesen, dass sich unbekannte Flaschen, also Flaschen ohne 
-Auftrag, im Drehteller befinden. Diese Flaschen werden jetzt automatisch aus dem Drehteller entfernt und an das Quality Gate weitergeleitet.
+erhielt. Beispielsweise müssen an Position 4 die Flaschen befüllt, an Position 5 die Deckel angefordert, an Position 7 die Deckel verschraubt 
+und an Position 8 die RFID-Tags beschrieben werden. Ohne korrekte Zustandsinformationen konnte der Drehteller diese Aufgaben nicht ausführen, 
+was die gesamte Anlage blockierte. Nach der vorgenommenen Änderung wird der Drehteller darauf hingewiesen, dass sich unbekannte Flaschen, also 
+Flaschen ohne Auftrag, im Drehteller befinden. Diese Flaschen werden nun automatisch aus dem Drehteller entfernt und an das Quality Gate 
+weitergeleitet.
 
 \textbf{Drehteller:} 
 fehlerfindung der knöpe -> Initalisierungsfahrt 
@@ -337,7 +338,6 @@ weiteren Arbeiten konzentrieren sich nun auf die Verbesserung der Benutzerfreund
 Aus den täglichen Meetings und dem Feedback der Projektmitglieder geht hervor, dass auch an den anderen Stationen der Anlage deutliche 
 Fortschritte erzielt wurden. Falls der Projektfortschritt bis zum Ende des Praxissemesters nicht vollständig den gesetzten Zielen entspricht, 
 bieten die sorgfältig erstellten Konzeptdokumente eine solide Grundlage für eine erfolgreiche Weiterführung durch zukünftige Studierende.
-
 
 Durch die vorgenommenen Änderungen wurde nicht nur die Effizienz der Abfüllstation gesteigert, sondern auch die Benutzerfreundlichkeit und 
 Robustheit des Systems deutlich verbessert.
