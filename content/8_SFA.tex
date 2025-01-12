@@ -95,7 +95,7 @@ von Code verhindert, die Zusammenarbeit erleichtert und ermöglicht eine grundle
 
 \section{Projekt SmartFactory-Anlage: Projektverlauf}
 
-\textbf{Auftaktwoche:}
+\subsection{Auftaktwoche:}
 
 Noch vor dem offiziellen Start des Projekts wurde in meiner Abteilung eine Auftaktwoche organisiert, die dazu diente, 
 uns auf die bevorstehenden Aufgaben vorzubereiten. Der Schwerpunkt lag darauf, unser Wissen und unseren Umgang mit dem 
@@ -105,7 +105,7 @@ unsere Aufgabe darin, die Steuerung eines Aufzugs mit fünf Stockwerken zu progr
 Programmierkonzepte wie die „State Machine“ vermittelt, die später eine wichtige Rolle bei der Entwicklung der 
 SmartFactory-Anlage spielten.
 
-\textbf{Hands-On SmartFactory-Anlage:}
+\subsection{Hands-On SmartFactory-Anlage:}
 
 Nach der Auftaktwoche wurden wir zufällig in Teams von zwei bis drei Personen eingeteilt, um die SmartFactory-Anlage 
 in Betrieb zu nehmen. Ziel war es, am Ende der Woche eine Flasche, mit dem bereits bestehenden Code, vollständig durch 
@@ -118,7 +118,7 @@ nachgetragen. Nach Abschluss dieser Aufgabe führten wir ein „Lessons Learned�
 dass die Anlage ohne einen sorgfältig erarbeiteten Plan und ein durchdachtes Konzept nicht effektiv in Betrieb 
 genommen werden kann.
 
-\textbf{Bibliotheksverantwortlicher (erweiternder Aufgabenbereich):} 
+\subsection{Bibliotheksverantwortlicher (erweiternder Aufgabenbereich):} 
 
 Mir wurde ein erweiterter Aufgabenbereich in Form des Bibliotheksverantwortlichen zugewiesen. Meine Aufgabe bestand darin, 
 die Projektbibliothek des Multiuser-Servers konsistent zu halten. Dies ist notwendig, da Programmbausteine gemäß dem 
@@ -136,10 +136,7 @@ nicht mit der neuen Version des Lichtsensors kompatibel ist. Dies würde zu eine
 führen. Ebenso könnte es passieren, dass auf dem Förderband noch eine ältere Version des Lichtsensors ohne die aktuellen 
 Änderungen verwendet wird. Dies führt zu Inkonsistenzen, die von mir bereinigt werden mussten.
 
-\textbf{Flaschenmanagment in der Unit:}      
-wie es war -> wie es werden soll (z.b. auftrag abarbeiten wenn keine weitere flasche kommt oder ersten drei flaschen für neuen auftrag verwendet)
-leerfahren in der unit (bei unbekannten Flaschen)
-current order abbrechen 
+\subsection{Flaschenmanagment in der Unit:}     
 
 \begin{figure}[h!]
     \centering
@@ -171,13 +168,41 @@ was die gesamte Anlage blockierte. Nach der vorgenommenen Änderung wird der Dre
 Flaschen ohne Auftrag, im Drehteller befinden. Diese Flaschen werden nun automatisch aus dem Drehteller entfernt und an das Quality Gate 
 weitergeleitet.
 
-\textbf{Drehteller:} 
-fehlerfindung der knöpe -> Initalisierungsfahrt 
+Außerdem erlaubt es die Abfüllstation, Aufträge zu bearbeiten oder gar zu löschen, da eine Liste aller angelegten Aufträge an angelegt ist. 
+Allerdings war es nicht möglich, einen Auftrag zu löschen, wenn dieser bereits in Bearbeitung war. Nun ist es möglich auch aktuelle Aufträge zu 
+löschen.
 
-\textbf{Kommunikation:} 
+\subsection{Drehteller:}
+subsection{Drehteller:}  
+\textbf{Problem:}  
+Die Knöpfe zur Steuerung des Drehtellers waren nicht korrekt eingestellt. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein 
+Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. 
+Beispielsweise drehte sich der Drehteller bei Betätigung des Knopfes „drehe rechts“ zwar in die gewünschte Richtung, setzte seine Bewegung 
+jedoch auch nach dem Loslassen des Knopfes fort. Dies widerspricht den Anforderungen an Sicherheit, Benutzerfreundlichkeit und Robustheit 
+der Anlage.  
+
+\textbf{Herausforderung:}  
+Eine große Herausforderung bei dieser Aufgabe war es, die Fehlerursache zu identifizieren. Zunächst vermuteten wir, dass die Kommandos zum 
+Anhalten des Drehtellers nicht korrekt gesendet wurden. Allerdings stellte sich heraus, dass die Kommandos nicht nur fehlerhaft gesendet wurden, 
+sondern gar nicht implementiert waren. Stattdessen wurde eine Nebenwirkung des Drehtellers als Absolutwertgeber ausgenutzt: Der Befehl, einen 
+neuen Absolutwert an der aktuellen Position des Drehtellers zu setzen, wurde mit seiner höheren Priorität verwendet, um das Drehen nach links 
+oder rechts zu stoppen.  
+
+\textbf{Lösung:}  
+Es musste ein neuer Befehl auf der untersten Steuerungsebene des Drehtellers implementiert werden, der das Stoppen des Drehtellers ermöglicht. 
+Hierfür wurde im Control-Modul \texttt{CM\_PositioningDrive} das UDT (User Defined Type) um ein neues Kommando erweitert. Dies war erforderlich, 
+damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl hinzugefügt werden konnte.  
+
+Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Funktionen. Durch das Einfügen dieser neuen Funktionalität konnte der 
+Halte-Befehl korrekt in die Steuerung der Knöpfe integriert werden. Mit der korrekten Implementierung des 
+Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
+ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden.  
+
+
+\subsection{Kommunikation:} 
 zyklisch und unitlogik zwischen mps und Abfüllung (mit mps counter auf abfüll seite/ Einführung deckel auf flasche im udt des ordermanagments)
 zwischen abfüllung und quality gate 
-MODI Erklären? (hand .../ composit ...)
+counter in abfüllung 
 
 
 %/////////////////////////////////////////////////////////////////////////////////////////////////////
