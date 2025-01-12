@@ -1,17 +1,17 @@
 \documentclass[
-    12pt,                     % Schriftgröße 12 pt
-    a4paper,
-    sfdefaults=false,
-    toc=chapterentrywithdots,
-    oneside,openright,
-    titlepage,
-    parskip=half,
-    headings=normal,          % Reduziert die Größe der Überschriften
-    listof=totoc,
-    index=totoc,
-    captions=tableheading,    % Bildunterschrift unter Tabellen
-    listof=flat,
-    final
+  12pt,                     % Schriftgröße 12 pt
+  a4paper,
+  sfdefaults=false,
+  toc=chapterentrywithdots,
+  oneside,openright,
+  titlepage,
+  parskip=half,
+  headings=normal,          % Reduziert die Größe der Überschriften
+  listof=totoc,
+  index=totoc,
+  captions=tableheading,    % Bildunterschrift unter Tabellen
+  listof=flat,
+  final
 ]{scrbook}
 
 % Schriftart Times New Roman
@@ -25,7 +25,7 @@
 \newcommand{\studiengang}{Informatik}  % {Informatik,Wirtschaftsinformatik,Medieninformatik}
 \newcommand{\matrikelnr}{3653446}
 \newcommand{\erstgutachter}{Prof. Dr. Trommler} %Prof.\,Dr.~Korbinian Riedhammer
-\newcommand{\zweitgutachter}{} %Prof.\,Dr.~Bartosz von\,Rymon\,Lipinski
+\newcommand{\zweitgutachter}{Etling, Michael; Conrad, Maximilian; Baron, Dominik} %Prof.\,Dr.~Bartosz von\,Rymon\,Lipinski
 \newcommand{\betreuer}{} %M.Sc.\,~Martina Schmidt
 \newcommand{\unternehmen}{Siemens}
 \newcommand{\logo}{figures/TH-Nuernberg-RGB.png}
@@ -60,6 +60,8 @@
 \usepackage{url}
 \usepackage[toc]{glossaries}
 \usepackage{pdfpages}
+\usepackage{placeins}
+\usepackage{float}
 
 % table setup
 \usepackage{longtable}
@@ -153,6 +155,7 @@
 %\include{content/5_outlook}
 %\include{content/6_summary}
 \include{content/7_VorstellungAbteilung}
+\include{content/4_experiments}
 \include{content/8_SFA}
 \include{content/9_Ende}
 %\include{content/3_method}
