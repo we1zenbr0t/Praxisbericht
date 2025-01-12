@@ -202,8 +202,20 @@ ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereing
 \subsection{Kommunikation:} 
 zyklisch und unitlogik zwischen mps und Abfüllung (mit mps counter auf abfüll seite/ Einführung deckel auf flasche im udt des ordermanagments)
 zwischen abfüllung und quality gate 
-counter in abfüllung 
 
+\textbf{Problem:}  
+Die Kommunikation zwischen den einzelnen Stationen der Anlage war auf „On-Demand“-Basis ausgelegt. Das bedeutet, dass jede Station nur zu 
+einem bestimmten Zeitpunkt mit einer anderen Station kommuniziert hat. Wenn jedoch eine Station nicht bereit war, die Kommunikation zu 
+empfangen, ging diese „verloren“. Dies führte dazu, dass Anlagenteile nicht mehr synchron arbeiteten, die Anlage in einen fehlerhaften 
+Zustand geriet und die Produktion gestoppt wurde.
+
+\textbf{Herausforderung:}  
+Hierfür musste ein neuer Baustein mit einem Watchdog-Timer eingeführt werden, der die Kommunikation zwischen den Stationen überwacht.
+
+\textbf{Lösung:}  
+Der neue Kommunikationsbaustein hat den alten Kommunikationsbaustein ersetzt, und die Logik wurde zu einer Acknowledge-Logik umgeschrieben. 
+Bis ein Acknowledge von der anderen Station kam, wurde die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die 
+Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden konnte und keine Kommunikation „verloren“ ging.
 
 %/////////////////////////////////////////////////////////////////////////////////////////////////////
 \section{Projekt SmartFactory-Anlage: Ergebnis}
