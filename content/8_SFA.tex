@@ -135,30 +135,35 @@ nicht mit der neuen Version des Lichtsensors kompatibel ist. Dies würde zu eine
 führen. Ebenso könnte es passieren, dass auf dem Förderband noch eine ältere Version des Lichtsensors ohne die aktuellen 
 Änderungen verwendet wird. Dies führt zu Inkonsistenzen, die von mir bereinigt werden mussten.
 
-\subsection{Flaschenmanagment in der Unit:}     
+\subsection{Flaschenmanagement in der Unit:}
 
-Das Flaschenmanagement der Abfüllstation wurde so umgesetzt, dass für jeden angeforderten Auftrag die benötigte Anzahl an Flaschen vom modularen 
-Produktionssystem bereitgestellt wird. Diese Flaschen werden anschließend befüllt und mit Deckeln verschlossen. Ein Problem trat jedoch auf, dass 
-nicht genügend Flaschen nachgeliefert wurden. Beispielsweise konnten von zwölf angeforderten Flaschen nur neun ankommen, wodurch die Abfüllung anhielt 
-und auf die Ankunft der noch fehlenden Flaschen wartete (siehe Abbildung \ref{fig:Abfüllung}).
+\textbf{Problem:}  
+Das Flaschenmanagement der Abfüllstation hatte zwei wesentliche Schwachstellen: Erstens wurden nicht immer ausreichend Flaschen geliefert, 
+um einen Auftrag vollständig zu erfüllen. Beispielsweise wurden bei einem Auftrag über zwölf Flaschen nur neun bereitgestellt, wodurch die 
+Abfüllung anhielt und auf die fehlenden Flaschen wartete (siehe Abbildung \ref{fig:Abfüllung}). Zweitens wurden die Auftragsdaten nicht remanent 
+gespeichert, was bedeutete, dass nach jedem Neustart oder Kaltstart der Steuerung alle Flaschen aus dem Drehteller entfernt werden mussten, bevor 
+ein neuer Auftrag gestartet werden konnte. Dies führte zu langen Stillstandszeiten und erschwerte die Bedienung der Anlage erheblich.  
 
-Um den Arbeitsfluss kontinuierlich aufrechtzuerhalten, wurde in Absprache mit den Betreuern eine Anpassung in der Unit der Abfüllstation 
-vorgenommen. Diese Änderung sorgt dafür, dass, falls innerhalb von sieben Sekunden keine neue Flasche geliefert wird, die verbliebenen Flaschen, 
-die sich bereits im Drehteller befinden und einem Auftrag zugewiesen wurden, dennoch abgefüllt und verschlossen werden. Dies gewährleistet eine 
-höhere Effizienz und verhindert lange Stillstandszeiten der Abfüllstation.
+Ein zusätzliches Problem ergab sich aus der Tatsache, dass der Drehteller nach einem Neustart erkannte, dass sich Flaschen in ihm befanden, 
+jedoch keine gültigen Auftragsdaten vorlagen. Dadurch geriet der Drehteller in einen ungültigen Zustand und konnte die Aufgaben an den einzelnen 
+Positionen nicht korrekt ausführen, was die gesamte Anlage blockierte.  
 
-Ein weiteres Problem betraf die Speicherung der Auftragsdaten. Diese wurden ursprünglich nicht remanent gespeichert, also nicht über einen 
-PLC-Stop hinaus erhalten. Dies führte dazu, dass nach jedem Neustart oder Kaltstart der Steuerung alle Flaschen aus dem Drehteller entfernt 
-werden mussten, bevor ein neuer Auftrag angelegt werden konnte. Dieses Verhalten widersprach dem Ziel, die Anlage auch für unerfahrene Bediener 
-einfach und benutzerfreundlich zu gestalten.
+\textbf{Herausforderung:}  
+Eine der zentralen Herausforderungen bestand darin, das Flaschenmanagement so anzupassen, dass sowohl die Lieferung unvollständiger 
+Flaschenmengen als auch der Verlust von Auftragsdaten behoben werden konnte, ohne dabei die bestehenden Prozesse zu beeinträchtigen. 
+Es war erforderlich, den Arbeitsfluss auch bei unvollständigen Flaschenlieferungen aufrechtzuerhalten und die Zustandsinformationen des 
+Drehtellers nach einem Neustart korrekt zu initialisieren. Zudem musste eine Lösung gefunden werden, um unbekannte Flaschen im Drehteller 
+zuverlässig zu erkennen und zu entfernen.  
 
-Der Drehteller erkannte nach einem Neustart weiterhin, dass sich Flaschen an den einzelnen Positionen im Drehteller befanden. Dies führte dazu, dass der 
-Drehteller in einen ungültigen Zustand geriet, da er für jede Position, an der eine Aufgabe auszuführen war, fehlerhafte Zustandsinformationen 
-erhielt. Beispielsweise müssen an Position eins(siehe Abbildung \ref{fig:Abfüllung}) die Flaschen befüllt, an Position zwei(siehe Abbildung \ref{fig:Abfüllung}) die Deckel angefordert, an Position drei(siehe Abbildung \ref{fig:Abfüllung}) die Deckel verschraubt 
-und an Position 4(siehe Abbildung \ref{fig:Abfüllung}) die RFID-Tags beschrieben werden. Ohne korrekte Zustandsinformationen konnte der Drehteller diese Aufgaben nicht ausführen, 
-was die gesamte Anlage blockierte. Nach der vorgenommenen Änderung wird der Drehteller darauf hingewiesen, dass sich unbekannte Flaschen, also 
-Flaschen ohne Auftrag, im Drehteller befinden. Diese Flaschen werden nun automatisch aus dem Drehteller entfernt und an das Quality Gate 
-weitergeleitet.
+\textbf{Lösung:}  
+Um die Probleme bei der Flaschenlieferung zu beheben, wurde die Steuerung der Abfüllstation angepasst. Wenn innerhalb von sieben Sekunden 
+keine neuen Flaschen geliefert werden, werden die bereits vorhandenen Flaschen im Drehteller dennoch abgefüllt und verschlossen. Dies gewährleistet einen kontinuierlichen Arbeitsfluss und minimiert Stillstandszeiten.  
+
+Für das Problem der nicht remanenten Auftragsdaten wurde die Steuerung so erweitert, dass die Zustandsinformationen des Drehtellers nach 
+einem Neustart korrekt initialisiert werden. Flaschen ohne gültige Auftragsdaten werden nun automatisch als unbekannt markiert und aus dem Drehteller entfernt. Diese Flaschen werden anschließend an das Quality Gate weitergeleitet, wodurch ein blockierter Zustand der Anlage verhindert wird.  
+
+Die vorgenommenen Änderungen verbesserten die Effizienz der Abfüllstation erheblich und steigerten sowohl die Benutzerfreundlichkeit als 
+auch die Robustheit der Anlage.
 
 \subsection{Drehteller:} 
 \textbf{Problem:}  
@@ -202,18 +207,29 @@ Der neue Kommunikationsbaustein hat den alten Kommunikationsbaustein ersetzt, un
 Bis ein Acknowledge von der anderen Station kommt, wird die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die 
 Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden kann und keine Kommunikation „verloren“ ging.
 
-\section{Projekt SmartFactory-Anlage: Ergebnis}
+\section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
 
-Der finale Funktionsumfang des Projekts ist zum Zeitpunkt der Erstellung dieses Berichts noch nicht vollständig absehbar. Dennoch wurden bereits 
-wesentliche Meilensteine gemäß den Vorgaben erreicht. Mit Ausnahme einiger kleinerer Bugs konnten alle kritischen, den Prozess unterbrechenden 
-Fehler, an der Abfüllstation behoben werden. Dadurch wurde das Hauptziel, die Robustheit der Anlage zu steigern, erfolgreich erreicht. Die 
-weiteren Arbeiten konzentrieren sich nun auf die Verbesserung der Benutzerfreundlichkeit und der Erweiterbarkeit der Anlage.
+Der finale Funktionsumfang des Projekts lässt sich zum Zeitpunkt der Erstellung dieses Berichts noch nicht vollständig abschätzen, da einige 
+Aspekte der Entwicklung und Implementierung noch in Arbeit sind. Dennoch konnte das Team bereits bedeutende Fortschritte erzielen und wesentliche 
+Meilensteine gemäß den ursprünglichen Vorgaben und dem Projektplan erreichen. Besonders hervorzuheben ist, dass alle kritischen Fehler, die den 
+Betrieb der Abfüllstation maßgeblich beeinträchtigen oder den Prozess unterbrechen konnten, erfolgreich identifiziert und behoben wurden. 
+Lediglich kleinere Bugs, die keine direkte Auswirkung auf den kontinuierlichen Betrieb haben, verbleiben noch zur Bearbeitung. Damit wurde 
+eines der zentralen Projektziele, die Robustheit der gesamten Anlage erheblich zu steigern, erfolgreich realisiert.
 
-Aus den täglichen Meetings und dem Feedback der Projektmitglieder geht hervor, dass auch an den anderen Stationen der Anlage deutliche 
-Fortschritte erzielt wurden. Falls der Projektfortschritt bis zum Ende des Praxissemesters nicht vollständig den gesetzten Zielen entspricht, 
-bieten die sorgfältig erstellten Konzeptdokumente eine solide Grundlage für eine erfolgreiche Weiterführung durch zukünftige Studierende.
+Der Fokus der weiteren Arbeiten liegt nun darauf, die Benutzerfreundlichkeit des Systems weiter zu verbessern und die Anlage so zu gestalten, 
+dass sie zukünftig leicht erweitert und angepasst werden kann. Die Verbesserung der Bedienoberflächen, die Optimierung der Steuerungslogik und 
+die Anpassung der Kommunikationsprozesse zwischen den Stationen sind dabei wichtige Arbeitsbereiche, die bereits angestoßen wurden.
 
-Durch die vorgenommenen Änderungen wurde nicht nur die Effizienz der Abfüllstation gesteigert, sondern auch die Benutzerfreundlichkeit und 
-Robustheit des Systems deutlich verbessert.
+Aus den regelmäßigen Teammeetings sowie dem wertvollen Feedback der Projektmitglieder und betreuenden Lehrkräfte geht klar hervor, dass auch an 
+den anderen Stationen der Anlage signifikante Fortschritte erzielt wurden. Trotz der Herausforderungen, die sich durch die komplexen 
+Abhängigkeiten der Systeme ergeben, konnte das Projektteam durch gezielte Koordination und klare Zielsetzungen einen stabilen Fortschritt 
+sicherstellen. Sollte es dennoch vorkommen, dass der Projektfortschritt bis zum Abschluss des Praxissemesters nicht alle gesetzten Ziele 
+vollständig erreicht, gewährleisten die sorgfältig erstellten Konzept- und Entwurfsdokumente eine solide Grundlage für die Weiterentwicklung 
+des Projekts durch zukünftige Studierende. Diese Dokumente enthalten detaillierte Beschreibungen der bisherigen Arbeiten, der zugrunde liegenden 
+Systemarchitektur sowie Empfehlungen für künftige Implementierungen.
 
-
+Besonders bemerkenswert ist, dass durch die vorgenommenen Änderungen an der Abfüllstation nicht nur die Effizienz des Produktionsprozesses 
+erheblich gesteigert werden konnte. Auch die Benutzerfreundlichkeit und Robustheit des gesamten Systems wurden signifikant verbessert. 
+Die Reduktion von Störungen, die Erhöhung der Systemstabilität und die klar strukturierte Benutzerführung tragen dazu bei, dass die Anlage 
+zuverlässiger und einfacher zu bedienen ist. Die ergriffenen Maßnahmen bilden somit eine wertvolle Grundlage für den langfristigen Erfolg 
+des Projekts.
