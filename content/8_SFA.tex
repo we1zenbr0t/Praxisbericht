@@ -207,6 +207,18 @@ Der neue Kommunikationsbaustein hat den alten Kommunikationsbaustein ersetzt, un
 Bis ein Acknowledge von der anderen Station kommt, wird die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die 
 Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden kann und keine Kommunikation „verloren“ ging.
 
+nachbestellung->neuer kommunikationsbaustein und neue funktion zum nachbestellen (nicht vom hmi sonder durch kommunikation bottledata)
+nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
+turntable deadlock error->em war in keinem fehlerzustand, es wurde aber kein neuer command gesendet, dadurch wurde der em status nicht auf ready gesetzt ->fehlerquittierung in der unit (fehlerquitierung wurde nicht richtig übergeben)
+steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen, 
+turntable beim anfahren und nothalt -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
+kurzschlussfehler nach l+
+gsd datei, standarttelegram für sinamics steuerung durch netzfrequenze, profisafe fehlersichere kommunikation (abschalten), pe klemme um antrieb abzuschalten (so passiert es: spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss
+-> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
+mit max und micha entscheidung
+Vereinzler automatische weiter arbeit bei einklemmen von kugel -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
+Fehler des Technologieobjekts nicht quittierbar -> staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
+
 \section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
 
 Der finale Funktionsumfang des Projekts lässt sich zum Zeitpunkt der Erstellung dieses Berichts noch nicht vollständig abschätzen, da einige 
