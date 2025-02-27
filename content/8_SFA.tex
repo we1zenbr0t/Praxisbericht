@@ -188,7 +188,7 @@ damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl
 Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Funktionen. Durch das Einfügen dieser neuen Funktionalität konnte der 
 Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korrekten Implementierung des 
 Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
-ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden.  
+ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.  
 
 
 \subsection{Kommunikation:} 
@@ -218,6 +218,8 @@ gsd datei, standarttelegram für sinamics steuerung durch netzfrequenze, profisa
 mit max und micha entscheidung
 Vereinzler automatische weiter arbeit bei einklemmen von kugel -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
 Fehler des Technologieobjekts nicht quittierbar -> staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
+
+Neuer Pellet return neues Konzept für Rückführung und neuer code
 
 \section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
 
