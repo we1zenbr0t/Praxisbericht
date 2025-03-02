@@ -16,6 +16,7 @@ gegebenenfalls mit den neuen Funktionen zu erweitern. Die Nutzung des ISA-88-Sta
 ohne einen Ansprechpartner aus unserem Projektteam weiterentwickelbar ist. 
 
 
+
 \section{Projekt Smart Factory-Anlage: Zielsetzung}\label{sec:Projekt Smart Factory-Anlage: Zielsetzung}
 
 Das Ziel am Ende des Praxissemesters war es, die SmartFactory-Anlage weiterzuentwickeln, ihre Robustheit zu erhöhen und uns eine tiefes Verständnis für komplexe Systeme eigenständig zu erarbeiten,
@@ -166,6 +167,7 @@ Die vorgenommenen Änderungen verbesserten die Effizienz der Abfüllstation erhe
 auch die Robustheit der Anlage.
 
 \subsection{Drehteller:} 
+
 \textbf{Problem:}  
 Die Taster auf dem HMI-Bediener-Panal zur Steuerung des Drehtellers waren nicht korrekt eingestellt. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein 
 Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. 
@@ -190,7 +192,15 @@ Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korr
 Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
 ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.  
 
+nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
+turntable beim anfahren und nothalt -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
 
+turntable deadlock error->em war in keinem fehlerzustand, es wurde aber kein neuer command gesendet, dadurch wurde der em status nicht auf ready gesetzt ->fehlerquittierung in der unit (fehlerquitierung wurde nicht richtig übergeben)
+
+gsd datei, standarttelegram für sinamics steuerung durch netzfrequenze, profisafe fehlersichere kommunikation (abschalten), pe klemme um antrieb abzuschalten (so passiert es: spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss
+-> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
+
+Fehler des Technologieobjekts nicht quittierbar -> staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
 \subsection{Kommunikation:} 
 
 \textbf{Problem:}  
@@ -205,21 +215,28 @@ Hierfür musste ein neuer Baustein mit einem Watchdog-Timer eingeführt werden, 
 \textbf{Lösung:}  
 Der neue Kommunikationsbaustein hat den alten Kommunikationsbaustein ersetzt, und die Logik wurde zu einer Acknowledge-Logik umgeschrieben. 
 Bis ein Acknowledge von der anderen Station kommt, wird die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die 
-Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden kann und keine Kommunikation „verloren“ ging.
+Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden kann und keine Kommunikation „verloren“ geht.
+Dadurch kann auch die Flaschenproduktion nach einem Fehlerzustand automatisch von der Anlage fortgesetzt werden.
 
-nachbestellung->neuer kommunikationsbaustein und neue funktion zum nachbestellen (nicht vom hmi sonder durch kommunikation bottledata)
-nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
-turntable deadlock error->em war in keinem fehlerzustand, es wurde aber kein neuer command gesendet, dadurch wurde der em status nicht auf ready gesetzt ->fehlerquittierung in der unit (fehlerquitierung wurde nicht richtig übergeben)
-steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen, 
-turntable beim anfahren und nothalt -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
-kurzschlussfehler nach l+
-gsd datei, standarttelegram für sinamics steuerung durch netzfrequenze, profisafe fehlersichere kommunikation (abschalten), pe klemme um antrieb abzuschalten (so passiert es: spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss
--> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
-mit max und micha entscheidung
+\textbf{Problem:}  
+Es soll für andere Anlagenteile, vorallem aber der Kommissonierung möglich sein, Flaschen, welche von der Qualitätsprüfung am Quality-Gate als ungenügend beschreiben wurden, nachzubestellen. Diese Flaschen werden nämlich aussortiert und dadurch stehen nicht vollständige Auftrage in der Kommissonierung.
+
+\textbf{Herausforderung:} 
+
+
+\textbf{Lösung:}  
+Es musste der neuer kommunikationsbaustein und neue funktion zum nachbestellen (nicht vom hmi sonder durch kommunikation bottledata)
+
+\subsection{Kugelabfüllung:} 
+Kurzschlussfehler nach l+
 Vereinzler automatische weiter arbeit bei einklemmen von kugel -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
-Fehler des Technologieobjekts nicht quittierbar -> staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
 
-Neuer Pellet return neues Konzept für Rückführung und neuer code
+\subsection{Steuerung:}
+steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen, 
+
+\subsection{Kugelrückführung:}
+
+Neuer Pellet return neues Konzept (wie davor wie jetzt) für Rückführung und neuer code
 
 \section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
 
