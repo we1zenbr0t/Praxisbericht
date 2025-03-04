@@ -94,7 +94,7 @@ besteht, wenn zwei Studierende gleichzeitig an derselben Datei arbeiten. Dies ha
 von Code verhindert, dass die Zusammenarbeit erleichtert und ermöglicht eine grundlegende Versionskontrolle.
 
 \section{Projekt SmartFactory-Anlage: Projektverlauf}
-
+%------------------------------------------------------
 \subsection{Auftaktwoche:}
 
 Noch vor dem offiziellen Start des Projekts wurde in meiner Abteilung eine Auftaktwoche organisiert, die dazu diente, 
@@ -104,7 +104,7 @@ absolviert hatten, fehlte uns durch ein Semester ohne praktische Anwendung die n
 unsere Aufgabe darin, die Steuerung eines Aufzugs mit fünf Stockwerken zu programmieren. Dabei wurden uns auch 
 Programmierkonzepte wie die „State Machine“ vermittelt, die später eine wichtige Rolle bei der Anwendung an der 
 SmartFactory-Anlage spielten.
-
+%------------------------------------------------------
 \subsection{Hands-On SmartFactory-Anlage:}
 
 Nach der Auftaktwoche wurden wir zufällig in Teams von zwei bis drei Personen eingeteilt, um die SmartFactory-Anlage 
@@ -117,7 +117,7 @@ wie die fehlerhafte Kalibrierung des Drehtellers oder die fehlende Initalisierun
 nachgetragen. Nach Abschluss dieser Aufgabe führten wir ein „Lessons Learned“ durch. Die wichtigste Erkenntnis hierbei war, 
 dass die Anlage ohne einen sorgfältig erarbeiteten Plan und ein durchdachtes Konzept nicht effektiv in Betrieb 
 genommen werden kann.
-
+%------------------------------------------------------
 \subsection{Bibliotheksverantwortlicher (erweiternder Aufgabenbereich):} 
 
 Mir wurde eine zusätzliche Aufgabe, in Form des Bibliotheksverantwortlichen, zugewiesen. Die Aufgabe bestand darin, 
@@ -135,7 +135,7 @@ Da die Projektbibliothek versionsabhängig arbeitet, kann es vorkommen, dass jem
 nicht mit der neuen Version des Lichtsensors kompatibel ist. Dies würde zu einem Ausfall der Lichtsensoren am Förderband 
 führen. Ebenso könnte es passieren, dass auf dem Förderband noch eine ältere Version des Lichtsensors ohne die aktuellen 
 Änderungen verwendet wird. Dies führt zu Inkonsistenzen, die von mir bereinigt werden mussten.
-
+%------------------------------------------------------
 \subsection{Flaschenmanagement in der Unit:}
 
 \textbf{Problem:}  
@@ -166,41 +166,7 @@ einem Neustart korrekt initialisiert werden. Flaschen ohne gültige Auftragsdate
 Die vorgenommenen Änderungen verbesserten die Effizienz der Abfüllstation erheblich und steigerten sowohl die Benutzerfreundlichkeit als 
 auch die Robustheit der Anlage.
 
-\subsection{Drehteller:} 
-
-\textbf{Problem:}  
-Die Taster auf dem HMI-Bediener-Panal zur Steuerung des Drehtellers waren nicht korrekt eingestellt. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein 
-Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. 
-Beispielsweise drehte sich der Drehteller bei Betätigung des Knopfes „drehe rechts“ zwar in die gewünschte Richtung, setzte seine Bewegung 
-jedoch auch nach dem Loslassen des Knopfes fort. Dies widersprach den Anforderungen an Sicherheit, Benutzerfreundlichkeit und Robustheit 
-der Anlage.  
-
-\textbf{Herausforderung:}  
-Eine große Herausforderung bei dieser Aufgabe war es, die Fehlerursache zu identifizieren. Zunächst vermuteten wir, dass die Kommandos zum 
-Anhalten des Drehtellers nicht korrekt gesendet wurden. Allerdings stellte sich heraus, dass die Kommandos nicht nur fehlerhaft gesendet wurden, 
-sondern gar nicht implementiert waren. Stattdessen wurde eine Nebenwirkung des Drehtellers als Absolutwertgeber ausgenutzt, denn der Befehl, einen 
-neuen Absolutwert an der aktuellen Position des Drehtellers zu setzen, wurde mit seiner höheren Priorität verwendet, um das Drehen nach links 
-oder rechts zu stoppen.  
-
-\textbf{Lösung:}  
-Es musste ein neuer Befehl auf der untersten Steuerungsebene des Drehtellers implementiert werden, der das Stoppen des Drehtellers ermöglicht. 
-Hierfür wurde im Control-Modul \texttt{CM\_PositioningDrive} das UDT (User Defined Type) um ein neues Kommando erweitert. Dies war erforderlich, 
-damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl hinzugefügt werden konnte.  
-
-Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Funktionen. Durch das Einfügen dieser neuen Funktionalität konnte der 
-Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korrekten Implementierung des 
-Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
-ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.  
-
-nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
-turntable beim anfahren und nothalt -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
-
-turntable deadlock error->em war in keinem fehlerzustand, es wurde aber kein neuer command gesendet, dadurch wurde der em status nicht auf ready gesetzt ->fehlerquittierung in der unit (fehlerquitierung wurde nicht richtig übergeben)
-
-gsd datei, standarttelegram für sinamics steuerung durch netzfrequenze, profisafe fehlersichere kommunikation (abschalten), pe klemme um antrieb abzuschalten (so passiert es: spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss
--> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
-
-Fehler des Technologieobjekts nicht quittierbar -> staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
+%------------------------------------------------------
 \subsection{Kommunikation:} 
 
 \textbf{Problem:}  
@@ -225,19 +191,88 @@ Es soll für andere Anlagenteile, vorallem aber der Kommissonierung möglich sei
 
 
 \textbf{Lösung:}  
-Es musste der neuer kommunikationsbaustein und neue funktion zum nachbestellen (nicht vom hmi sonder durch kommunikation bottledata)
+Es musste ein neuer Kommunikationsbaustein, für die Kommunikation mit der Kommisonierung, und eine neue Nachbestellfunktion implementiert werden. Der Kommunikationsbaustein war bereits vorhanden und es musste nur eine Kopie mit der IP der Kommisonierung in das Projekt eingefügt werden. Für die Funktion konnte die ungewandelte Funktion zum bestellen von Aufträgen benutzt und direkt in die Unit eingefügt werden, doch statt Eingaben vom HMI für die Anzahl der Flaschen und Kugeln zu erhalten, werden hier die Auftragsdaten der noch nachzubestellenden Flasche benutzt.
+%------------------------------------------------------
+\subsection{Drehteller:} 
 
+\textbf{Problem:}  
+Die Taster auf dem HMI-Bediener-Panal zur Steuerung des Drehtellers waren nicht korrekt eingestellt. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein 
+Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. 
+Beispielsweise drehte sich der Drehteller bei Betätigung des Knopfes „drehe rechts“ zwar in die gewünschte Richtung, setzte seine Bewegung 
+jedoch auch nach dem Loslassen des Knopfes fort. Dies widersprach den Anforderungen an Sicherheit, Benutzerfreundlichkeit und Robustheit 
+der Anlage.  
+
+\textbf{Herausforderung:}  
+Eine große Herausforderung bei dieser Aufgabe war es, die Fehlerursache zu identifizieren. Zunächst vermuteten wir, dass die Kommandos zum 
+Anhalten des Drehtellers nicht korrekt gesendet wurden. Allerdings stellte sich heraus, dass die Kommandos nicht nur fehlerhaft gesendet wurden, 
+sondern gar nicht implementiert waren. Stattdessen wurde eine Nebenwirkung des Drehtellers als Absolutwertgeber ausgenutzt, denn der Befehl, einen 
+neuen Absolutwert an der aktuellen Position des Drehtellers zu setzen, wurde mit seiner höheren Priorität verwendet, um das Drehen nach links 
+oder rechts zu stoppen.  
+
+\textbf{Lösung:}  
+Es musste ein neuer Befehl auf der untersten Steuerungsebene des Drehtellers implementiert werden, der das Stoppen des Drehtellers ermöglicht. 
+Hierfür wurde im Control-Modul \texttt{CM\_PositioningDrive} das UDT (User Defined Type) um ein neues Kommando erweitert. Dies war erforderlich, 
+damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl hinzugefügt werden konnte.  
+
+Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Bibliotheksfunktionen. Durch das Einfügen dieser neuen Funktionalität konnte der 
+Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korrekten Implementierung des 
+Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
+ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.  
+
+\textbf{Problem:}
+turntable beim anfahren und nothalt + Fehler des Technologieobjekts nicht quittierbar -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
+
+Beim Anfahren der Drehscheibe sowie bei einem Not-Halt tritt ein Fehler im Technologieobjekt auf, der nicht quittiert werden kann. Dadurch verlässt die Drehscheibe ihre Ausgangsposition und muss neu kalibriert werden. Dies führt dazu, dass die Flaschen und die Auftragsposition nicht mehr übereinstimmen. Zudem wird die Position des Auftrags nicht übergeben, da im Fehlerzustand keine steigende Flanke des Drehtisches weitergegeben wird.
+
+\textbf{Herausforderung:} 
+beim nothalt spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss und damit auch mc_halt nicht
+
+Während eines Not-Halts wird die Spannung an der EP-Klemme abgeschaltet, wodurch jegliche Kontrolle über die Drehscheibe verloren geht. Dies stellt eine Schwachstelle dar, da weder MC_Power noch MC_Halt Einfluss auf den Prozess haben.
+
+\textbf{Lösung:}  
+-> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
+-> so wurde es gelöst: nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
+staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
+
+Beim Anfahren der Drehscheibe sowie bei einem Not-Halt trat ein Fehler im Technologieobjekt auf, der nicht quittiert werden konnte. Infolgedessen verließ die Drehscheibe ihre Ausgangsposition und musste neu kalibriert werden, was dazu führte, dass die Flaschen und die Auftragsposition nicht mehr übereinstimmten. Zudem wurde die Position des Auftrags nicht korrekt übergeben, da im Fehlerzustand keine steigende Flanke des Drehtisches weitergegeben wurde.
+
+Ein weiteres Problem bestand darin, dass während eines Not-Halts die Spannung an der EP-Klemme abgeschaltet wurde, wodurch jegliche Kontrolle über die Drehscheibe verloren ging. Dies stellte eine Schwachstelle dar, da weder MC_Power noch MC_Halt Einfluss auf den Prozess hatten.
+
+Erarbeitete Lösungsansätze waren die Verzögerung der 24V-Versorgung am Antrieb, um ein kontrolliertes Anhalten zu ermöglichen, sowie die Anpassung der Verdrahtung der Failsafe-Digitaleingänge am Sinamics-System – entweder durch eine Safety-Schaltung oder durch eine direkte Verdrahtungsänderung. Aus Zeitgründen wurde sich jedoch gegen diese Ansätze entschieden.
+
+Stattdessen wurde eine andere Lösung umgesetzt: Eine automatische Nachbestellung wird nun ausgelöst, wenn sich kein Deckel auf der Flasche befindet. Dies erfolgt durch einen speziellen Baustein für die Nachbestellung, der mit StatStationsData[8] arbeitet und die Werte entsprechend umformt. Zusätzlich wurde eine Flanke bei „New Order“ eingeführt, um die Flaschenanforderung korrekt zu erkennen. Darüber hinaus wurde der StatErrorStatus durch eine temporäre Variable (Temp) ersetzt, da der ursprüngliche Stat-Wert über einen Zyklus hinweg bestehen blieb und nach dem Quittieren den Fehler erneut in den Status schrieb.
+%------------------------------------------------
 \subsection{Kugelabfüllung:} 
-Kurzschlussfehler nach l+
-Vereinzler automatische weiter arbeit bei einklemmen von kugel -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
+\textbf{Problem:}
+Rührer in den Kugelbehältern der Abfüllung hören nach zwei Minuten auf zu drehen, dadurch fallen keine Kugeln mehr zu den Vereinzlern um abgefüllt zu werden. Dadurch, da die Vereinzler nicht prüfen können ob eine Kugel sich in ihnen befindet, werden Flaschen nur halb oder garnicht abgefüllt.
 
+\textbf{Herausforderung:}
+Kurzschlussfehler nach l+ beheben.
+
+\textbf{Lösung:}
+Kurzschlussfehlertest ausschalten und 
+Vereinzler automatische weiter arbeit bei einklemmen von kugel schnellere abfüllung war dadurch behindert -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
+%------------------------------------------------------
 \subsection{Steuerung:}
-steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen, 
+\textbf{Problem:}
 
+\textbf{Herausforderung:}
+
+\textbf{Lösung:}
+steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen
+%------------------------------------------------------
 \subsection{Kugelrückführung:}
+\textbf{Problem:}
+Neuer Pellet return neues Konzept, da sehr laut und umpräzise (wie davor wie jetzt) für Rückführung und neuer code
 
-Neuer Pellet return neues Konzept (wie davor wie jetzt) für Rückführung und neuer code
+\textbf{Herausforderung:}
+move_relative funktioniert nicht schrittmotor dreht nur 1,8 Grad und 12 löcher sind 30 Grad (30 nicht durch 1,8 teilbar) und generell ungenauer positionsgeber (dreht sich mehr oder weniger als 18 Grad)
 
+\textbf{Lösung:}
+->bin sensor im code nutzbar (inputmapping) in EM_PelletReturn
+->velocity ist für movejog in der sw config anstatt eine static im cm positioning drive
+->move_jog statt move_relative, wenn sensor aktiviert stope drehen und aktiviere farbsensor -> laufe weiter und 
+%------------------------------------------------------
 \section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
 
 Der finale Funktionsumfang des Projekts lässt sich zum Zeitpunkt der Erstellung dieses Berichts noch nicht vollständig abschätzen, da einige 
