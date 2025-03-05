@@ -138,142 +138,55 @@ führen. Ebenso könnte es passieren, dass auf dem Förderband noch eine ältere
 %------------------------------------------------------
 \subsection{Flaschenmanagement in der Unit:}
 
-\textbf{Problem:}  
-Das Flaschenmanagement der Abfüllstation hatte zwei wesentliche Schwachstellen: Erstens wurden nicht immer ausreichend Flaschen geliefert, 
-um einen Auftrag vollständig zu erfüllen. Beispielsweise wurden bei einem Auftrag über zwölf Flaschen nur neun bereitgestellt, wodurch die 
-Abfüllung anhielt und auf die fehlenden Flaschen wartete (siehe Abbildung \ref{fig:Abfüllung}). Zweitens wurden die Auftragsdaten nicht remanent 
-gespeichert, was bedeutete, dass nach jedem Neustart oder Kaltstart der Steuerung alle Flaschen aus dem Drehteller entfernt werden mussten, bevor 
-ein neuer Auftrag gestartet werden konnte. Dies führte zu langen Stillstandszeiten und erschwerte die Bedienung der Anlage erheblich.  
+Das Flaschenmanagement der Abfüllstation hatte zwei wesentliche Schwachstellen: Erstens wurden nicht immer ausreichend Flaschen geliefert, um einen Auftrag vollständig zu erfüllen. Beispielsweise wurden bei einem Auftrag über zwölf Flaschen nur neun bereitgestellt, wodurch die Abfüllung anhielt und auf die fehlenden Flaschen wartete (siehe Abbildung \ref{fig:Abfüllung}). Zweitens wurden die Auftragsdaten nicht remanent gespeichert, was bedeutete, dass nach jedem Neustart oder Kaltstart der Steuerung alle Flaschen aus dem Drehteller entfernt werden mussten, bevor ein neuer Auftrag gestartet werden konnte. Dies führte zu langen Stillstandszeiten und erschwerte die Bedienung der Anlage erheblich. Ein zusätzliches Problem ergab sich aus der Tatsache, dass der Drehteller nach einem Neustart erkannte, dass sich Flaschen in ihm befanden, jedoch keine gültigen Auftragsdaten vorlagen. Dadurch geriet der Drehteller in einen ungültigen Zustand und konnte die Aufgaben an den einzelnen Positionen nicht korrekt ausführen, was die gesamte Anlage blockierte.
 
-Ein zusätzliches Problem ergab sich aus der Tatsache, dass der Drehteller nach einem Neustart erkannte, dass sich Flaschen in ihm befanden, 
-jedoch keine gültigen Auftragsdaten vorlagen. Dadurch geriet der Drehteller in einen ungültigen Zustand und konnte die Aufgaben an den einzelnen 
-Positionen nicht korrekt ausführen, was die gesamte Anlage blockierte.  
+Eine der zentralen Herausforderungen bestand darin, das Flaschenmanagement so anzupassen, dass sowohl die Lieferung unvollständiger Flaschenmengen als auch der Verlust von Auftragsdaten behoben werden konnte, ohne dabei die bestehenden Prozesse zu beeinträchtigen. Es war erforderlich, den Arbeitsfluss auch bei unvollständigen Flaschenlieferungen aufrechtzuerhalten und die Zustandsinformationen des Drehtellers nach einem Neustart korrekt zu initialisieren. Zudem musste eine Lösung gefunden werden, um unbekannte Flaschen im Drehteller zuverlässig zu erkennen und zu entfernen.
 
-\textbf{Herausforderung:}  
-Eine der zentralen Herausforderungen bestand darin, das Flaschenmanagement so anzupassen, dass sowohl die Lieferung unvollständiger 
-Flaschenmengen als auch der Verlust von Auftragsdaten behoben werden konnte, ohne dabei die bestehenden Prozesse zu beeinträchtigen. 
-Es war erforderlich, den Arbeitsfluss auch bei unvollständigen Flaschenlieferungen aufrechtzuerhalten und die Zustandsinformationen des 
-Drehtellers nach einem Neustart korrekt zu initialisieren. Zudem musste eine Lösung gefunden werden, um unbekannte Flaschen im Drehteller 
-zuverlässig zu erkennen und zu entfernen.  
-
-\textbf{Lösung:}  
-Um die Probleme bei der Flaschenlieferung zu beheben, wurde die Steuerung der Abfüllstation angepasst. Wenn innerhalb von sieben Sekunden 
-keine neuen Flaschen geliefert werden, werden die bereits vorhandenen Flaschen im Drehteller dennoch abgefüllt und verschlossen. Dies gewährleistet einen kontinuierlichen Arbeitsfluss und minimiert Stillstandszeiten.  
-
-Für das Problem der nicht remanenten Auftragsdaten wurde die Steuerung so erweitert, dass die Zustandsinformationen des Drehtellers nach 
-einem Neustart korrekt initialisiert werden. Flaschen ohne gültige Auftragsdaten werden nun automatisch als unbekannt markiert und aus dem Drehteller entfernt. Diese Flaschen werden anschließend an das Quality Gate weitergeleitet, wodurch ein blockierter Zustand der Anlage verhindert wird.  
-
-Die vorgenommenen Änderungen verbesserten die Effizienz der Abfüllstation erheblich und steigerten sowohl die Benutzerfreundlichkeit als 
-auch die Robustheit der Anlage.
+Um die Probleme bei der Flaschenlieferung zu beheben, wurde die Steuerung der Abfüllstation angepasst. Wenn innerhalb von sieben Sekunden keine neuen Flaschen geliefert werden, werden die bereits vorhandenen Flaschen im Drehteller dennoch abgefüllt und verschlossen. Dies gewährleistet einen kontinuierlichen Arbeitsfluss und minimiert Stillstandszeiten. Für das Problem der nicht remanenten Auftragsdaten wurde die Steuerung so erweitert, dass die Zustandsinformationen des Drehtellers nach einem Neustart korrekt initialisiert werden. Flaschen ohne gültige Auftragsdaten werden nun automatisch als unbekannt markiert und aus dem Drehteller entfernt. Diese Flaschen werden anschließend an das Quality Gate weitergeleitet, wodurch ein blockierter Zustand der Anlage verhindert wird. Die vorgenommenen Änderungen verbesserten die Effizienz der Abfüllstation erheblich und steigerten sowohl die Benutzerfreundlichkeit als auch die Robustheit der Anlage.
 
 %------------------------------------------------------
 \subsection{Kommunikation:} 
 
-\textbf{Problem:}  
-Die Kommunikation zwischen den einzelnen Stationen der Anlage war auf „On-Demand“-Basis ausgelegt. Das bedeutet, dass jede Station nur zu 
-einem bestimmten Zeitpunkt mit einer anderen Station kommuniziert hat. Wenn jedoch eine Station nicht bereit war, die Kommunikation zu 
-empfangen, ging diese „verloren“. Dies führte dazu, dass Anlagenteile nicht mehr synchron arbeiteten, die Anlage in einen fehlerhaften 
-Zustand geriet und die Produktion gestoppt wurde.
+Ein weiteres Problem bestand darin, dass die Kommunikation zwischen den einzelnen Stationen der Anlage auf „On-Demand“-Basis ausgelegt war. Das bedeutete, dass jede Station nur zu einem bestimmten Zeitpunkt mit einer anderen Station kommunizierte. Wenn jedoch eine Station nicht bereit war, die Kommunikation zu empfangen, ging diese verloren. Dies führte dazu, dass Anlagenteile nicht mehr synchron arbeiteten, die Anlage in einen fehlerhaften Zustand geriet und die Produktion gestoppt wurde. 
 
-\textbf{Herausforderung:}  
-Hierfür musste ein neuer Baustein mit einem Watchdog-Timer eingeführt werden, der die Kommunikation zwischen den Stationen überwacht.
+Um dieses Problem zu lösen, musste ein neuer Baustein mit einem Watchdog-Timer eingeführt werden, der die Kommunikation zwischen den Stationen überwacht. Der neue Kommunikationsbaustein ersetzte den alten und die Logik wurde zu einer Acknowledge-Logik umgeschrieben. Bis ein Acknowledge von der anderen Station kommt, wird die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden konnte und keine Kommunikation verloren ging. Dadurch konnte auch die Flaschenproduktion nach einem Fehlerzustand automatisch von der Anlage fortgesetzt werden.
 
-\textbf{Lösung:}  
-Der neue Kommunikationsbaustein hat den alten Kommunikationsbaustein ersetzt, und die Logik wurde zu einer Acknowledge-Logik umgeschrieben. 
-Bis ein Acknowledge von der anderen Station kommt, wird die Kommunikation nicht als abgeschlossen betrachtet. Dies führte dazu, dass die 
-Produktion nach Wiederherstellung eines fehlerfreien Zustands der Anlage fortgesetzt werden kann und keine Kommunikation „verloren“ geht.
-Dadurch kann auch die Flaschenproduktion nach einem Fehlerzustand automatisch von der Anlage fortgesetzt werden.
+Ein weiteres Problem bestand darin, dass es für andere Anlagenteile, vor allem aber für die Kommissionierung, nicht möglich war, Flaschen, welche von der Qualitätsprüfung am Quality-Gate als ungenügend beschrieben wurden, nachzubestellen. Diese Flaschen wurden aussortiert, was dazu führte, dass in der Kommissionierung nicht vollständige Aufträge vorlagen.
 
-\textbf{Problem:}  
-Es soll für andere Anlagenteile, vorallem aber der Kommissonierung möglich sein, Flaschen, welche von der Qualitätsprüfung am Quality-Gate als ungenügend beschreiben wurden, nachzubestellen. Diese Flaschen werden nämlich aussortiert und dadurch stehen nicht vollständige Auftrage in der Kommissonierung.
+Die Herausforderung bestand darin, eine nahtlose Integration der Nachbestellfunktion in das bestehende System zu gewährleisten, ohne die laufenden Prozesse zu stören. Es war notwendig, sicherzustellen, dass die Kommunikation zwischen den verschiedenen Anlagenteilen zuverlässig und effizient abläuft. Zudem musste die Nachbestellfunktion so gestaltet werden, dass sie flexibel auf unterschiedliche Anforderungen reagieren kann, ohne dass umfangreiche Anpassungen erforderlich sind.
 
-\textbf{Herausforderung:} 
+Um dieses Problem zu lösen, wurde ein neuer Kommunikationsbaustein für die Kommunikation mit der Kommissionierung und eine neue Nachbestellfunktion implementiert. Der Kommunikationsbaustein war bereits vorhanden und es musste nur eine Kopie mit der IP der Kommissionierung in das Projekt eingefügt werden. Für die Nachbestellfunktion konnte die bestehende Funktion zum Bestellen von Aufträgen verwendet und direkt in die Unit integriert werden. Anstatt jedoch Eingaben vom HMI für die Anzahl der Flaschen und Kugeln zu erhalten, wurden hier die Auftragsdaten der noch nachzubestellenden Flaschen verwendet.
 
-
-\textbf{Lösung:}  
-Es musste ein neuer Kommunikationsbaustein, für die Kommunikation mit der Kommisonierung, und eine neue Nachbestellfunktion implementiert werden. Der Kommunikationsbaustein war bereits vorhanden und es musste nur eine Kopie mit der IP der Kommisonierung in das Projekt eingefügt werden. Für die Funktion konnte die ungewandelte Funktion zum bestellen von Aufträgen benutzt und direkt in die Unit eingefügt werden, doch statt Eingaben vom HMI für die Anzahl der Flaschen und Kugeln zu erhalten, werden hier die Auftragsdaten der noch nachzubestellenden Flasche benutzt.
-%------------------------------------------------------
 \subsection{Drehteller:} 
+Ein weiteres Problem bestand darin, dass die Taster auf dem HMI-Bediener-Panel zur Steuerung des Drehtellers nicht korrekt eingestellt waren. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. Beispielsweise drehte sich der Drehteller bei Betätigung des Knopfes „drehe rechts“ zwar in die gewünschte Richtung, setzte seine Bewegung jedoch auch nach dem Loslassen des Knopfes fort. Dies widersprach den Anforderungen an Sicherheit, Benutzerfreundlichkeit und Robustheit der Anlage.
 
-\textbf{Problem:}  
-Die Taster auf dem HMI-Bediener-Panal zur Steuerung des Drehtellers waren nicht korrekt eingestellt. Dies führte dazu, dass bei der Kalibrierung des Drehtellers ein 
-Wechsel zwischen „drehe rechts“ und „drehe links“ nicht möglich war und zu einem nicht quittierbaren Fehler an der Abfüllstation führte. 
-Beispielsweise drehte sich der Drehteller bei Betätigung des Knopfes „drehe rechts“ zwar in die gewünschte Richtung, setzte seine Bewegung 
-jedoch auch nach dem Loslassen des Knopfes fort. Dies widersprach den Anforderungen an Sicherheit, Benutzerfreundlichkeit und Robustheit 
-der Anlage.  
+Eine große Herausforderung bei dieser Aufgabe war es, die Fehlerursache zu identifizieren. Zunächst vermuteten wir, dass die Kommandos zum Anhalten des Drehtellers nicht korrekt gesendet wurden. Allerdings stellte sich heraus, dass die Kommandos nicht nur fehlerhaft gesendet wurden, sondern gar nicht implementiert waren. Stattdessen wurde eine Nebenwirkung des Drehtellers als Absolutwertgeber ausgenutzt, denn der Befehl, einen neuen Absolutwert an der aktuellen Position des Drehtellers zu setzen, wurde mit seiner höheren Priorität verwendet, um das Drehen nach links oder rechts zu stoppen.
 
-\textbf{Herausforderung:}  
-Eine große Herausforderung bei dieser Aufgabe war es, die Fehlerursache zu identifizieren. Zunächst vermuteten wir, dass die Kommandos zum 
-Anhalten des Drehtellers nicht korrekt gesendet wurden. Allerdings stellte sich heraus, dass die Kommandos nicht nur fehlerhaft gesendet wurden, 
-sondern gar nicht implementiert waren. Stattdessen wurde eine Nebenwirkung des Drehtellers als Absolutwertgeber ausgenutzt, denn der Befehl, einen 
-neuen Absolutwert an der aktuellen Position des Drehtellers zu setzen, wurde mit seiner höheren Priorität verwendet, um das Drehen nach links 
-oder rechts zu stoppen.  
+Es musste ein neuer Befehl auf der untersten Steuerungsebene des Drehtellers implementiert werden, der das Stoppen des Drehtellers ermöglicht. Hierfür wurde im Control-Modul \texttt{CM\_PositioningDrive} das UDT (User Defined Type) um ein neues Kommando erweitert. Dies war erforderlich, damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl hinzugefügt werden konnte.
 
-\textbf{Lösung:}  
-Es musste ein neuer Befehl auf der untersten Steuerungsebene des Drehtellers implementiert werden, der das Stoppen des Drehtellers ermöglicht. 
-Hierfür wurde im Control-Modul \texttt{CM\_PositioningDrive} das UDT (User Defined Type) um ein neues Kommando erweitert. Dies war erforderlich, 
-damit im Equipment-Modul \texttt{EM\_Drehteller} ein entsprechender neuer Befehl hinzugefügt werden konnte.  
-
-Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Bibliotheksfunktionen. Durch das Einfügen dieser neuen Funktionalität konnte der 
-Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korrekten Implementierung des 
-Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu 
-ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.  
-
-\textbf{Problem:}
-turntable beim anfahren und nothalt + Fehler des Technologieobjekts nicht quittierbar -> turntable verlässt ausgangsposition und wird neu kalibiriert (flaschen und auftragsposition stimmen nicht mehr über ein)/position des auftrages wird nicht übergeben, weil im error state keine rising edge des turntabels übergeben wird
-
-Beim Anfahren der Drehscheibe sowie bei einem Not-Halt tritt ein Fehler im Technologieobjekt auf, der nicht quittiert werden kann. Dadurch verlässt die Drehscheibe ihre Ausgangsposition und muss neu kalibriert werden. Dies führt dazu, dass die Flaschen und die Auftragsposition nicht mehr übereinstimmen. Zudem wird die Position des Auftrags nicht übergeben, da im Fehlerzustand keine steigende Flanke des Drehtisches weitergegeben wird.
-
-\textbf{Herausforderung:} 
-beim nothalt spannung an der ep klemme wird abgeschaltet dadurch gibt es keine kontrolle mehr-> verbessrungswürdig) mc_power hat keinen Einfluss und damit auch mc_halt nicht
-
-Während eines Not-Halts wird die Spannung an der EP-Klemme abgeschaltet, wodurch jegliche Kontrolle über die Drehscheibe verloren geht. Dies stellt eine Schwachstelle dar, da weder MC_Power noch MC_Halt Einfluss auf den Prozess haben.
-
-\textbf{Lösung:}  
--> möglichkeiten: verzögerung der 24V am antrieb um halt zu ermöglichen, failsafe digitaleingänge auf der sinamics verdrahten (safty oder verdrahtung anpassen)
--> so wurde es gelöst: nachbestellen wenn kein deckel auf der flasche ist (baustein von nachbestellung mit statstaionsdata[8] und umformung als input) + flanke bei new order (flaschenanforderung) einführen
-staterrorstatus ersetzt gegen temp (da stat über einen zyklus bestehen bleibt und den fehler nach quittieren wieder in den status schreibt)
-
+Als Technologieobjekt besitzt der Drehteller bereits vorgeschriebene Bibliotheksfunktionen. Durch das Einfügen dieser neuen Funktionalität konnte der Halte-Befehl korrekt in die Steuerung der Taster integriert werden. Mit der korrekten Implementierung des Halte-Befehls war es außerdem möglich, in der Anlagenlogik den zuvor missbräuchlich genutzten Befehl zum Setzen eines neuen Absolutwerts zu ersetzen. Dadurch konnte auch die Kalibrierung des Drehtellers ohne Benutzereingaben beim Kaltstart ermöglicht werden, da der remanent gespeicherte Absolutwert nicht beim Neustart überschrieben wurde und der Drehteller sich dadurch selbstständig korrigieren kann.
+%------------------------------------------------
 Beim Anfahren der Drehscheibe sowie bei einem Not-Halt trat ein Fehler im Technologieobjekt auf, der nicht quittiert werden konnte. Infolgedessen verließ die Drehscheibe ihre Ausgangsposition und musste neu kalibriert werden, was dazu führte, dass die Flaschen und die Auftragsposition nicht mehr übereinstimmten. Zudem wurde die Position des Auftrags nicht korrekt übergeben, da im Fehlerzustand keine steigende Flanke des Drehtisches weitergegeben wurde.
 
-Ein weiteres Problem bestand darin, dass während eines Not-Halts die Spannung an der EP-Klemme abgeschaltet wurde, wodurch jegliche Kontrolle über die Drehscheibe verloren ging. Dies stellte eine Schwachstelle dar, da weder MC_Power noch MC_Halt Einfluss auf den Prozess hatten.
+Ein weiteres Problem bestand darin, dass während eines Not-Halts die Spannung an der EP-Klemme abgeschaltet wurde, wodurch jegliche Kontrolle über die Drehscheibe verloren ging. Dies stellte eine Schwachstelle dar, da weder MC\_Power noch MC\_Halt Einfluss auf den Prozess hatten.
 
 Erarbeitete Lösungsansätze waren die Verzögerung der 24V-Versorgung am Antrieb, um ein kontrolliertes Anhalten zu ermöglichen, sowie die Anpassung der Verdrahtung der Failsafe-Digitaleingänge am Sinamics-System – entweder durch eine Safety-Schaltung oder durch eine direkte Verdrahtungsänderung. Aus Zeitgründen wurde sich jedoch gegen diese Ansätze entschieden.
 
-Stattdessen wurde eine andere Lösung umgesetzt: Eine automatische Nachbestellung wird nun ausgelöst, wenn sich kein Deckel auf der Flasche befindet. Dies erfolgt durch einen speziellen Baustein für die Nachbestellung, der mit StatStationsData[8] arbeitet und die Werte entsprechend umformt. Zusätzlich wurde eine Flanke bei „New Order“ eingeführt, um die Flaschenanforderung korrekt zu erkennen. Darüber hinaus wurde der StatErrorStatus durch eine temporäre Variable (Temp) ersetzt, da der ursprüngliche Stat-Wert über einen Zyklus hinweg bestehen blieb und nach dem Quittieren den Fehler erneut in den Status schrieb.
+Aufgrund des Zeitdrucks wurde sich jedoch gegen diese Ansätze entschieden. Letztendlich wurde das Problem jedoch anders gelöst: Eine automatische Nachbestellung wird nun ausgelöst, wenn sich kein Deckel auf der Flasche befindet. Dies erfolgt durch einen speziellen Baustein für die Nachbestellung und dem RFID-Leser, welcher prüft, ob sich ein RFID-Chip unter sich befindet. Darüber hinaus wurde die statische Variable zur Fehlerspeicherung durch eine temporäre Variable (Temp) ersetzt, da der ursprüngliche Stat-Wert über einen Zyklus hinweg bestehen blieb und nach dem Quittieren den Fehler erneut in den Status schrieb.
 %------------------------------------------------
 \subsection{Kugelabfüllung:} 
-\textbf{Problem:}
-Rührer in den Kugelbehältern der Abfüllung hören nach zwei Minuten auf zu drehen, dadurch fallen keine Kugeln mehr zu den Vereinzlern um abgefüllt zu werden. Dadurch, da die Vereinzler nicht prüfen können ob eine Kugel sich in ihnen befindet, werden Flaschen nur halb oder garnicht abgefüllt.
+Eine Kundenanforderung bestand darin, dass die Abfüllung schneller abfüllt, da durch Aufträge mit vielen Kugeln die Anlage ausgebremst wurde und durch die einzelne Abfüllung der drei Farben nacheinander sehr langsam war. Die Herausforderung bestand darin, die Abfüllung zu beschleunigen, ohne die Farben zu mischen. Eine Beschleunigung des Timers führte jedoch zu einem Einklemmen der Kugeln, was zu einem blockierten Zustand der Anlage führte. Dieser Zustand konnte nur durch manuelles Eingreifen behoben werden.
 
-\textbf{Herausforderung:}
-Kurzschlussfehler nach l+ beheben.
-
-\textbf{Lösung:}
-Kurzschlussfehlertest ausschalten und 
-Vereinzler automatische weiter arbeit bei einklemmen von kugel schnellere abfüllung war dadurch behindert -> logik anpassen und fehler abfangen (soll sich in die andere richtung bewegen und fehler aus der fehlerliste entfernen) (EM-Bottler)
-%------------------------------------------------------
-\subsection{Steuerung:}
-\textbf{Problem:}
-
-\textbf{Herausforderung:}
-
-\textbf{Lösung:}
-steuerung ein knopf in die anlage für turntable und gripper integriert (laufband und pneumatic war schon) -> button neu mappen und flankenauswertung zur steuerung einbauen
+Die Lösung bestand darin, den Vereinzler so anzupassen, dass er automatisch weiterarbeitet, wenn eine Kugel eingeklemmt wird. Dadurch konnte die Abfüllung beschleunigt werden, ohne dass die Kugeln sich gegenseitig blockierten. Die Logik wurde entsprechend angepasst, um Fehler abzufangen und sicherzustellen, dass sich der Vereinzler in die andere Richtung bewegt, wenn eine Kugel eingeklemmt ist. Zudem wurden die Fehler aus der Fehlerliste im Equipment-Modul der Abfüllstation entfernt.
 %------------------------------------------------------
 \subsection{Kugelrückführung:}
-\textbf{Problem:}
-Neuer Pellet return neues Konzept, da sehr laut und umpräzise (wie davor wie jetzt) für Rückführung und neuer code
+Eine Kundenanforderung bestand darin, die Lautstärke und die Genauigkeit der Kugelrückführung der Recyclingstation zu verbessern. Ursprünglich wurde die Kugelrückführung durch einen angebrachten Rüttelmotor realisiert, der den Einlauf der Kugeln in einen Trichter erleichtern sollte. Der Rüttelmotor und die angebrachte Pneumatik zum Zurückschießen der Kugeln führten jedoch zu einer sehr lauten Arbeitsumgebung. Um die Lautstärke zu reduzieren und die Genauigkeit der Kugelrückführung zu erhöhen, wurde ein neues Konzept entwickelt. Dieses Konzept sah vor, dass die Kugeln durch einen Drehteller mit 20 Löchern in den Trichter zurückgeführt werden. Der Drehteller wird durch einen Schrittmotor angetrieben, der die Kugeln in den Trichter schiebt. Der Schrittmotor wird durch einen Binärsensor gesteuert, der erkennt, ob sich eine Kugel im Trichter befindet. Wenn eine Kugel erkannt wird, stoppt der Schrittmotor und der Farbsensor wird aktiviert. Der Farbsensor erkennt die Farbe der Kugel und leitet sie an die entsprechende Position weiter. Sobald die Kugel die Position erreicht hat, wird der Schrittmotor erneut aktiviert und schiebt die Kugel in den Trichter zurück.
 
-\textbf{Herausforderung:}
-move_relative funktioniert nicht schrittmotor dreht nur 1,8 Grad und 12 löcher sind 30 Grad (30 nicht durch 1,8 teilbar) und generell ungenauer positionsgeber (dreht sich mehr oder weniger als 18 Grad)
+Eine Herausforderung bestand darin, dass die Funktion \texttt{move\_relative} nicht korrekt funktionierte, da der Schrittmotor nur 1,8 Grad drehte und die 12 Löcher des Drehtellers eine Drehung von 30 Grad erforderten, was nicht durch 1,8 teilbar ist. Zudem war der Positionsgeber generell ungenau, was dazu führte, dass sich der Drehteller mehr oder weniger als die erforderlichen 18 Grad drehte.
 
-\textbf{Lösung:}
-->bin sensor im code nutzbar (inputmapping) in EM_PelletReturn
-->velocity ist für movejog in der sw config anstatt eine static im cm positioning drive
-->move_jog statt move_relative, wenn sensor aktiviert stope drehen und aktiviere farbsensor -> laufe weiter und 
-%------------------------------------------------------
-\section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt SmartFactory-Anlage: Ergebnis}
+Die Lösung bestand darin, den eigentlichen Binärsensor des \texttt{EM\_PelletReturn} in das Input-Mapping korrekt einzufügen und nutzbar zu machen. Zudem wurde die Geschwindigkeit für die \texttt{move\_jog}-Funktion des Technologieobjekts in der Softwarekonfiguration anstatt als statische Variable im \texttt{CM\_PositioningDrive} definiert, um eine leichte Änderung der Geschwindigkeit zu ermöglichen. Anstelle von \texttt{move\_relative} wurde \texttt{move\_jog} verwendet. Wenn der Sensor aktiviert ist, stoppt der Drehteller, der Farbsensor wird aktiviert und der Drehteller läuft weiter, bis der Sensor wieder deaktiviert ist.
+
+\section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt_SmartFactory-Anlage:_Ergebnis}
 
 Der finale Funktionsumfang des Projekts lässt sich zum Zeitpunkt der Erstellung dieses Berichts noch nicht vollständig abschätzen, da einige 
 Aspekte der Entwicklung und Implementierung noch in Arbeit sind. Dennoch konnte das Team bereits bedeutende Fortschritte erzielen und wesentliche 
