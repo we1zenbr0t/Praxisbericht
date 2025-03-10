@@ -189,7 +189,14 @@ Eine Herausforderung bestand darin, dass die Funktion \texttt{move\_relative} ni
 
 Die Lösung bestand darin, den eigentlichen Binärsensor des \texttt{EM\_PelletReturn} in das Input-Mapping korrekt einzufügen und nutzbar zu machen, da dieser nicht/ bzw. Falsch kodiert wurde, um dann die Kalibrierung des Tellers zu ermöglichen, ohne einen Bibliotheksbaustein ändern zu müssen. Zudem wurde die Geschwindigkeit für die \texttt{move\_jog}-Funktion des Technologieobjekts in der Softwarekonfiguration anstatt als statische Variable im \texttt{CM\_PositioningDrive} definiert, um eine leichte Änderung der Geschwindigkeit zu ermöglichen. Anstelle von \texttt{move\_relative} wird die Funktion move_jog verwendet, dadurch das diese Funktion den Schrittmotor durchgänig drehen lässt ist der Sortierablauf unabhänig von der Ungenauigkeit des Schrittmotors. Desweitern schaut der Farbsensor jeden Zyklus, ob ein an trainierter Farbbereich erkannt wird und führt die oben erwännte Programmlogik aus. Durch die neue Ablauflogik und den neuen Trichter wird also nicht nur leiser sortiert, sondern auch die Ungenauigkeit des Schrittmotors umgangen
 
-(bild des neuen Trichters "Bild.PNG" nach )
+\begin{figure}[h!] % "H" zwingt die Position der Abbildung genau hier
+    \centering  
+    \includegraphics[width=0.8\textwidth]{figures/b15ba5c8-ba29-495a-9e40-18a8cdfba58f.PNG}
+    \caption{Trichter mit Drehteller zur KugelrückführungTrichter mit Drehteller zur Kugelrückführung\cite{siemens2022}} 
+    \label{fig:Trichter mit Drehteller zur Kugelrückführung} % Für spätere Verweise im Text.
+    \vspace{0.5em} % Optional: Abstand zwischen Bildunterschrift und Zusatztext
+    \small % Schriftgröße anpassen, falls gewünscht
+\end{figure}
 
 \section{Projekt SmartFactory-Anlage: Ergebnis}\label{sec:Projekt_SmartFactory-Anlage:_Ergebnis}
 
